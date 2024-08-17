@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.hWindowControl1 = new HalconDotNet.HWindowControl();
             this.采集图像 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
@@ -38,6 +39,13 @@
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.textBox6 = new System.Windows.Forms.TextBox();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.自适应ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.textBox7 = new System.Windows.Forms.TextBox();
+            this.textBox8 = new System.Windows.Forms.TextBox();
+            this.contextMenuStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
             // hWindowControl1
@@ -48,9 +56,11 @@
             this.hWindowControl1.Location = new System.Drawing.Point(11, 11);
             this.hWindowControl1.Margin = new System.Windows.Forms.Padding(2);
             this.hWindowControl1.Name = "hWindowControl1";
-            this.hWindowControl1.Size = new System.Drawing.Size(1113, 662);
+            this.hWindowControl1.Size = new System.Drawing.Size(1080, 720);
             this.hWindowControl1.TabIndex = 15;
-            this.hWindowControl1.WindowSize = new System.Drawing.Size(1113, 662);
+            this.hWindowControl1.WindowSize = new System.Drawing.Size(1080, 720);
+            this.hWindowControl1.HMouseWheel += new HalconDotNet.HMouseEventHandler(this.hWindowControl1_HMouseWheel);
+            this.hWindowControl1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.hWindowControl1_MouseMove);
             // 
             // 采集图像
             // 
@@ -112,23 +122,58 @@
             // 
             // textBox5
             // 
-            this.textBox5.Location = new System.Drawing.Point(1303, 370);
+            this.textBox5.Location = new System.Drawing.Point(1224, 370);
             this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(80, 21);
+            this.textBox5.Size = new System.Drawing.Size(73, 21);
             this.textBox5.TabIndex = 24;
             // 
             // textBox6
             // 
-            this.textBox6.Location = new System.Drawing.Point(1224, 370);
+            this.textBox6.Location = new System.Drawing.Point(1303, 370);
             this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(73, 21);
+            this.textBox6.Size = new System.Drawing.Size(80, 21);
             this.textBox6.TabIndex = 23;
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            // 
+            // contextMenuStrip2
+            // 
+            this.contextMenuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.自适应ToolStripMenuItem});
+            this.contextMenuStrip2.Name = "contextMenuStrip2";
+            this.contextMenuStrip2.Size = new System.Drawing.Size(113, 26);
+            // 
+            // 自适应ToolStripMenuItem
+            // 
+            this.自适应ToolStripMenuItem.Name = "自适应ToolStripMenuItem";
+            this.自适应ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.自适应ToolStripMenuItem.Text = "自适应";
+            // 
+            // textBox7
+            // 
+            this.textBox7.Location = new System.Drawing.Point(1303, 397);
+            this.textBox7.Name = "textBox7";
+            this.textBox7.Size = new System.Drawing.Size(80, 21);
+            this.textBox7.TabIndex = 26;
+            // 
+            // textBox8
+            // 
+            this.textBox8.Location = new System.Drawing.Point(1224, 397);
+            this.textBox8.Name = "textBox8";
+            this.textBox8.Size = new System.Drawing.Size(73, 21);
+            this.textBox8.TabIndex = 25;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1442, 684);
+            this.ClientSize = new System.Drawing.Size(1455, 870);
+            this.Controls.Add(this.textBox7);
+            this.Controls.Add(this.textBox8);
+            this.Controls.Add(this.hWindowControl1);
             this.Controls.Add(this.textBox5);
             this.Controls.Add(this.textBox6);
             this.Controls.Add(this.textBox4);
@@ -138,9 +183,9 @@
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.采集图像);
-            this.Controls.Add(this.hWindowControl1);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.contextMenuStrip2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -158,6 +203,12 @@
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
+        private System.Windows.Forms.ToolStripMenuItem 自适应ToolStripMenuItem;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.TextBox textBox7;
+        private System.Windows.Forms.TextBox textBox8;
     }
 }
 
