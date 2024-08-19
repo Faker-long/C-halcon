@@ -1,4 +1,5 @@
 ﻿using HalconDotNet;
+using Hook;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -6,6 +7,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Net.Mime.MediaTypeNames;
@@ -25,7 +27,7 @@ namespace 标定
         HObject ho_WiresFilled, ho_Balls, ho_SingleBalls, ho_IntermediateBalls;
         HObject ho_Circle;
         HObject ho_Circle1;
-
+        GlobalHook hook;
         // Local control variables 
 
         HTuple hv_Row = new HTuple(), hv_Column = new HTuple();
@@ -45,8 +47,8 @@ namespace 标定
                 {
                     Zoom = 0.5;
                 }
-                HOperatorSet.GetMposition(hWindowControl1.HalconWindow, out Row, out Col, out Button);
-                HOperatorSet.GetPart(hWindowControl1.HalconWindow, out Row0, out Column0, out Row00, out Column00);
+                HOperatorSet.GetMposition(hwindow, out Row, out Col, out Button);
+                HOperatorSet.GetPart(hwindow, out Row0, out Column0, out Row00, out Column00);
                 Ht = Row00 - Row0;
                 Wt = Column00 - Column0;
                 if (Ht * Wt < 32000 * 32000 || Zoom == 1.5)//普通版halcon能处理的图像最大尺寸是32K*32K。如果无限缩小原图像，导致显示的图像超出限制，则会造成程序崩溃
@@ -55,26 +57,31 @@ namespace 标定
                     c1 = (Column0 + ((1 - (1.0 / Zoom)) * (Col - Column0)));
                     r2 = r1 + (Ht / Zoom);
                     c2 = c1 + (Wt / Zoom);
-                    HOperatorSet.SetPart(hWindowControl1.HalconWindow, r1, c1, r2, c2);
-                    HOperatorSet.ClearWindow(hWindowControl1.HalconWindow);
-                    HOperatorSet.DispObj(getImage, hWindowControl1.HalconWindow);
+                    HOperatorSet.SetPart(hwindow, r1, c1, r2, c2);
+                    HOperatorSet.ClearWindow(hwindow);
+                    HOperatorSet.DispObj(getImage, hwindow);
+                    HOperatorSet.DispObj(ho_SingleBalls, hwindow);
                     HOperatorSet.DispObj(ho_Circle, hwindow);
                 }
+                
             }
             catch { }
         }
-        private HWindow window;
 
         private void hWindowControl1_MouseMove(object sender, MouseEventArgs e)
         {
             textBox8.Text  =Cursor.Position.X.ToString();
             textBox7.Text = Cursor.Position.Y.ToString();
+            
+
+            
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             try
             {
+                HOperatorSet.SetColor(hwindow, "green");
                 double a = Convert.ToDouble(textBox3.Text);
                 double b = Convert.ToDouble(textBox4.Text);
                 HOperatorSet.AffineTransPoint2d(hv_HomMat2D1, a, b, out hv_Qx, out hv_Qy);
@@ -86,13 +93,7 @@ namespace 标定
                 textBox6.Text = formattedNumber1.ToString();
                 HOperatorSet.GenCircle(out ho_Circle, Convert.ToDouble( b), Convert.ToDouble(a), 20);
                 HOperatorSet.DispObj(ho_Circle, hwindow);
-
-                ho_Circle.Dispose();
-                HOperatorSet.GenCircle(out ho_Circle1, BB, AA, 10);
-                if (HDevWindowStack.IsOpen())
-                {
-                    HOperatorSet.SetColor(HDevWindowStack.GetActive(), "green");
-                }
+                HOperatorSet.GenCircle(out ho_Circle1, AA, BB, 10);
                 HOperatorSet.DispObj(ho_Circle1, hwindow);
             }
             catch { }
@@ -111,7 +112,7 @@ namespace 标定
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            
+            HOperatorSet.SetColor(hwindow, "red");
             HOperatorSet.GenEmptyObj(out ho_Image);
             HOperatorSet.GenEmptyObj(out ho_GrayImage);
             HOperatorSet.GenEmptyObj(out ho_Regions);
@@ -160,9 +161,10 @@ namespace 标定
                 using (HDevDisposeHelper dh = new HDevDisposeHelper())
                 {
                     ho_Circle.Dispose();
-                    HOperatorSet.GenCircle(out ho_Circle, hv_WorldRow.TupleSelect(hv_Index), hv_WorldCol.TupleSelect(
-                        hv_Index), 10);
+                    HOperatorSet.GenCircle(out ho_Circle, hv_WorldRow.TupleSelect(hv_Index), hv_WorldCol.TupleSelect(hv_Index), 10); 
+                    HOperatorSet.DispObj(ho_Circle, hwindow);
                 }
+             
             }
             
             //生成标定
@@ -179,13 +181,14 @@ namespace 标定
             textBox1.Text += hv_Column.ToString();
             textBox2.Text = hv_WorldRow.ToString();
             textBox2.Text += hv_WorldCol.ToString();
+
             HOperatorSet.DispObj(ho_SingleBalls, hwindow);
+            HOperatorSet.DispObj(ho_Circle,hwindow);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             OpenFileDialog openfile = new OpenFileDialog();
-
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
             openFileDialog1.Filter = "JPEG文件|*.jpg*";
             openFileDialog1.RestoreDirectory = true;
@@ -201,8 +204,9 @@ namespace 标定
                 HOperatorSet.GetImageSize(getImage, out ImageWidth, out ImageHeight);
                 HOperatorSet.SetPart(hwindow, 0, 0, ImageHeight - 1, ImageWidth - 1);
                 HOperatorSet.DispObj(getImage, hwindow);
+             //ew   HOperatorSet.SetColor(hwindow, "red");
             }
-        }
 
+        }
     }
 }
